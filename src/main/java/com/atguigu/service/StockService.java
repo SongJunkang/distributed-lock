@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,11 @@ public class StockService {
 
     @Autowired
     private StockMapper stockMapper;
+
+    private StringRedisTemplate template;
+
+    private RedisTemplate redisTemplate;
+    //这2个序列化器不一样。
 
     private ReentrantLock  lock = new ReentrantLock ();
 
