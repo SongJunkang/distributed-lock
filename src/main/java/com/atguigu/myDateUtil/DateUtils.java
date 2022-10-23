@@ -13,6 +13,7 @@ import java.util.Objects;
 public class DateUtils {
 
     public static Date formatString(String date){
+
         if (!StringUtils.hasLength(date)) {
 
             return null;
@@ -34,7 +35,7 @@ public class DateUtils {
         if (Objects.isNull(date))
         {
 
-            return null;
+            return "";
         }
 
         SimpleDateFormat simpleDateFormat =  new SimpleDateFormat(Constants.SIMPLE_DATA_FORMART);

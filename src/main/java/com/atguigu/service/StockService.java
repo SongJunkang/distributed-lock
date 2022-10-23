@@ -7,13 +7,17 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -35,16 +39,69 @@ public class StockService {
     @Autowired
     private StockMapper stockMapper;
 
-    private StringRedisTemplate template;
 
-    private RedisTemplate redisTemplate;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+    //这个是已经设置好的序列化器。
+
+//    private RedisTemplate redisTemplate;
+// 默认的是JDK的序列化器。二进制，没有可读性。
     //这2个序列化器不一样。
+
+    public void deduct() {
+
+
+        //1、查询库存信息
+
+        String stock = this.redisTemplate.opsForValue().get("stock");
+        //2、判断库存是否充足
+
+        if (stock != null  && stock.length() != 0)
+        {
+            Integer st = Integer.valueOf(stock);
+
+            if(st > 0){
+                //库存扣减
+                this.redisTemplate.opsForValue().set("stock", String.valueOf(--st));
+
+
+            }
+        }
+
+//        this.redisTemplate.execute(new SessionCallback() {
+//            @Override
+//            public Object execute(RedisOperations operations) throws DataAccessException {
+//                operations.watch("stock");
+//                // 1. 查询库存信息
+//                Object stock = operations.opsForValue().get("stock");
+//                // 2. 判断库存是否充足
+//                int st = 0;
+//                if (stock != null && (st = Integer.parseInt(stock.toString())) > 0) {
+//                    // 3. 扣减库存
+//                    operations.multi();
+//                    operations.opsForValue().set("stock", String.valueOf(--st));
+//                    List exec = operations.exec();
+//                    if (exec == null || exec.size() == 0) {
+//                        try {
+//                            Thread.sleep(50);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        deduct();
+//                    }
+//                    return exec;
+//                }
+//                return null;
+//            }
+//        });
+
+    }
 
     private ReentrantLock  lock = new ReentrantLock ();
 
 
 //    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
-    public  void deduct(){
+    public  void deduct2(){
 
 
         lock.lock();

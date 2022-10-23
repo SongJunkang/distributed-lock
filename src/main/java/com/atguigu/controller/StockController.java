@@ -19,7 +19,7 @@ public class StockController {
     private StockService stockService;
 
 
-    @GetMapping("stock/deduct")
+        @GetMapping("stock/deduct")
     public String deduct(){
 
         this.stockService.deduct();

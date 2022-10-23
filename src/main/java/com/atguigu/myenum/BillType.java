@@ -24,4 +24,6 @@ public enum BillType {
                 .findFirst().orElseThrow(() ->new IllegalArgumentException("不支持的账单类型代码 ：" + code));
     }
 
+
+
 }

@@ -60,6 +60,8 @@ class DistributedLockApplicationTests {
     public void testBillType(){
 
         BillType billType = BillType.instanceByCode(2);
+
+
         System.out.println("代码为2的清单类型是：" + billType.getMsg() );
     }
 
