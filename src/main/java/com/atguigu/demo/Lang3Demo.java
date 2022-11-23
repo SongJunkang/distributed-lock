@@ -60,6 +60,8 @@ public class Lang3Demo {
 
     public static void main(String[] args) {
 
+        System.out.println(StringUtils.isNotBlank("1"));
+
         Lang3Demo lang3Demo = new Lang3Demo();
 
         boolean result = StringUtils.isBlank("");

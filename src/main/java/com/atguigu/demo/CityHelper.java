@@ -29,11 +29,8 @@ public class CityHelper {
 
             Set<City> citySet = new HashSet<>(1024);
 
-            Iterator<CSVRecord> iterator = parser.iterator();
-
-            while (iterator.hasNext())
-            {
-                citySet.add(parserCity(iterator.next()));
+            for (CSVRecord record : parser) {
+                citySet.add(parserCity(record));
             }
             return citySet;
 

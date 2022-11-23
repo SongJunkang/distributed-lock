@@ -4,7 +4,9 @@ import com.atguigu.mapper.StockMapper;
 import com.atguigu.pojo.Stock;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.dao.DataAccessException;
@@ -29,7 +31,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Scope(value = "prototype",proxyMode = ScopedProxyMode.TARGET_CLASS )
 //proxyMode的默认值是No，表示非不生效。
 
-public class StockService {
+public class StockService extends ServiceImpl {
 
 
     //service默认的是单例的。
@@ -37,6 +39,7 @@ public class StockService {
 //    private Stock stock  = new Stock();
 
     @Autowired
+//    @Qualifier()
     private StockMapper stockMapper;
 
 
@@ -63,7 +66,6 @@ public class StockService {
             if(st > 0){
                 //库存扣减
                 this.redisTemplate.opsForValue().set("stock", String.valueOf(--st));
-
 
             }
         }
@@ -147,8 +149,7 @@ public class StockService {
         Stock stock = this.stockMapper.selectOne(new QueryWrapper<Stock>().eq("id","1"));
         Stock stock2 = stockMapper.selectOne(new QueryWrapper<Stock>().eq("id", "1"));
 
-        Stock stock1 = stockMapper.getStockById(1);
-        return stock1;
+        return stockMapper.getStockById(1);
 
     }
 
@@ -168,6 +169,17 @@ public class StockService {
 
 
         return  stock;
+
+    }
+
+    public int save(Stock stock) {
+
+
+
+
+        int insertResult = stockMapper.insert(stock);
+
+        return insertResult;
 
     }
 }

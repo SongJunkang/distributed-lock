@@ -18,4 +18,6 @@ public interface StockMapper extends BaseMapper<Stock>{
 
     @Select("select * from db_stock where id = ${id}")
     Stock getStockById(Integer id );
+
+
 }
